@@ -18,6 +18,8 @@
 
 #include "vdrawhelper.h"
 
+#ifndef RLOTTIE_WITH_STATIC_QT
+
 /*
   result = s
   dest = s * ca + d * cia
@@ -162,6 +164,27 @@ void comp_func_DestinationOut(uint *dest, const uint *src, int length,
         }
     }
 }
+
+#else // RLOTTIE_WITH_STATIC_QT
+
+extern void comp_func_solid_Source(uint32_t *dest, int length, uint32_t color,
+                            uint32_t const_alpha);
+extern void comp_func_solid_SourceOver(uint32_t *dest, int length, uint32_t color,
+                                uint32_t const_alpha);
+extern void comp_func_solid_DestinationIn(uint *dest, int length, uint color,
+                                          uint const_alpha);
+extern void comp_func_solid_DestinationOut(uint *dest, int length, uint color,
+                                           uint const_alpha);
+extern void comp_func_Source(uint32_t *dest, const uint32_t *src, int length,
+                      uint32_t const_alpha);
+extern void comp_func_SourceOver(uint32_t *dest, const uint32_t *src, int length,
+                          uint32_t const_alpha);
+extern void comp_func_DestinationIn(uint *dest, const uint *src, int length,
+                             uint const_alpha);
+extern void comp_func_DestinationOut(uint *dest, const uint *src, int length,
+                              uint const_alpha);
+
+#endif // RLOTTIE_WITH_STATIC_QT
 
 CompositionFunctionSolid COMP_functionForModeSolid_C[] = {
     comp_func_solid_Source, comp_func_solid_SourceOver,

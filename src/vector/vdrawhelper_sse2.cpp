@@ -210,6 +210,8 @@ void comp_func_solid_Source_sse2(uint32_t* dest, int length, uint32_t color,
     }
 }
 
+#ifndef RLOTTIE_WITH_STATIC_QT
+
 void comp_func_solid_SourceOver_sse2(uint32_t* dest, int length, uint32_t color,
                                      uint32_t const_alpha)
 {
@@ -243,6 +245,8 @@ void comp_func_Source_sse2(uint32_t* dest, const uint32_t* src, int length,
                                                              V4_SRC_DEST_LEN_INC})
     }
 }
+
+#endif // RLOTTIE_WITH_STATIC_QT
 
 void comp_func_SourceOver_sse2_1(uint32_t* dest, const uint32_t* src,
                                  int length, uint32_t const_alpha)
@@ -435,6 +439,8 @@ static force_inline uint32_t core_combine_over_u_pixel_sse2(uint32_t src,
     return dst;
 }
 
+#ifndef RLOTTIE_WITH_STATIC_QT
+
 // static force_inline void
 // core_combine_over_u_sse2_no_mask (uint32_t *	  pd,
 //                  const uint32_t*    ps,
@@ -494,5 +500,7 @@ void comp_func_SourceOver_sse2(uint32_t* pd, const uint32_t* ps, int w,
         w--;
     }
 }
+
+#endif // RLOTTIE_WITH_STATIC_QT
 
 #endif
