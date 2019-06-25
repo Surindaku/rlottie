@@ -54,6 +54,7 @@
 // the parse.
 
 #include <array>
+#include <string>
 
 #include "lottiemodel.h"
 #include "rapidjson/document.h"
@@ -1240,6 +1241,7 @@ LOTTrimData::TrimType LottieParserImpl::getTrimType()
         break;
     default:
         RAPIDJSON_ASSERT(0);
+        return LOTTrimData::TrimType();
         break;
     }
 }
