@@ -52,6 +52,7 @@
 // the parse.
 
 #include <array>
+#include <string>
 
 #include "lottiemodel.h"
 #include "rapidjson/document.h"
