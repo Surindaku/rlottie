@@ -18,13 +18,11 @@
 
 #include "vdrawhelper.h"
 
-#ifndef RLOTTIE_WITH_STATIC_QT
-
 /*
   result = s
   dest = s * ca + d * cia
 */
-void comp_func_solid_Source(uint32_t *dest, int length, uint32_t color,
+static void comp_func_solid_Source(uint32_t *dest, int length, uint32_t color,
                             uint32_t const_alpha)
 {
     int ialpha, i;
@@ -47,7 +45,7 @@ void comp_func_solid_Source(uint32_t *dest, int length, uint32_t color,
        = s * ca + d * (1 - sa*ca)
        = s' + d ( 1 - s'a)
 */
-void comp_func_solid_SourceOver(uint32_t *dest, int length, uint32_t color,
+static void comp_func_solid_SourceOver(uint32_t *dest, int length, uint32_t color,
                                 uint32_t const_alpha)
 {
     int ialpha, i;
@@ -89,7 +87,7 @@ static void comp_func_solid_DestinationOut(uint *dest, int length, uint color,
     }
 }
 
-void comp_func_Source(uint32_t *dest, const uint32_t *src, int length,
+static void comp_func_Source(uint32_t *dest, const uint32_t *src, int length,
                       uint32_t const_alpha)
 {
     if (const_alpha == 255) {
@@ -106,7 +104,7 @@ void comp_func_Source(uint32_t *dest, const uint32_t *src, int length,
 /* s' = s * ca
  * d' = s' + d (1 - s'a)
  */
-void comp_func_SourceOver(uint32_t *dest, const uint32_t *src, int length,
+static void comp_func_SourceOver(uint32_t *dest, const uint32_t *src, int length,
                           uint32_t const_alpha)
 {
     uint s, sia;
@@ -133,7 +131,7 @@ void comp_func_SourceOver(uint32_t *dest, const uint32_t *src, int length,
     }
 }
 
-void comp_func_DestinationIn(uint *dest, const uint *src, int length,
+static void comp_func_DestinationIn(uint *dest, const uint *src, int length,
                              uint const_alpha)
 {
     if (const_alpha == 255) {
@@ -149,7 +147,7 @@ void comp_func_DestinationIn(uint *dest, const uint *src, int length,
     }
 }
 
-void comp_func_DestinationOut(uint *dest, const uint *src, int length,
+static void comp_func_DestinationOut(uint *dest, const uint *src, int length,
                               uint const_alpha)
 {
     if (const_alpha == 255) {
@@ -164,27 +162,6 @@ void comp_func_DestinationOut(uint *dest, const uint *src, int length,
         }
     }
 }
-
-#else // RLOTTIE_WITH_STATIC_QT
-
-extern void comp_func_solid_Source(uint32_t *dest, int length, uint32_t color,
-                            uint32_t const_alpha);
-extern void comp_func_solid_SourceOver(uint32_t *dest, int length, uint32_t color,
-                                uint32_t const_alpha);
-extern void comp_func_solid_DestinationIn(uint *dest, int length, uint color,
-                                          uint const_alpha);
-extern void comp_func_solid_DestinationOut(uint *dest, int length, uint color,
-                                           uint const_alpha);
-extern void comp_func_Source(uint32_t *dest, const uint32_t *src, int length,
-                      uint32_t const_alpha);
-extern void comp_func_SourceOver(uint32_t *dest, const uint32_t *src, int length,
-                          uint32_t const_alpha);
-extern void comp_func_DestinationIn(uint *dest, const uint *src, int length,
-                             uint const_alpha);
-extern void comp_func_DestinationOut(uint *dest, const uint *src, int length,
-                              uint const_alpha);
-
-#endif // RLOTTIE_WITH_STATIC_QT
 
 CompositionFunctionSolid COMP_functionForModeSolid_C[] = {
     comp_func_solid_Source, comp_func_solid_SourceOver,
