@@ -196,7 +196,7 @@ inline static void comp_func_helper_sse2(uint32_t* dest, int length,
                        })
 }
 
-void comp_func_solid_Source_sse2(uint32_t* dest, int length, uint32_t color,
+void Vcomp_func_solid_Source_sse2(uint32_t* dest, int length, uint32_t color,
                                  uint32_t const_alpha)
 {
     if (const_alpha == 255) {
@@ -210,9 +210,7 @@ void comp_func_solid_Source_sse2(uint32_t* dest, int length, uint32_t color,
     }
 }
 
-#ifndef RLOTTIE_WITH_STATIC_QT
-
-void comp_func_solid_SourceOver_sse2(uint32_t* dest, int length, uint32_t color,
+void Vcomp_func_solid_SourceOver_sse2(uint32_t* dest, int length, uint32_t color,
                                      uint32_t const_alpha)
 {
     int ialpha;
@@ -222,7 +220,7 @@ void comp_func_solid_SourceOver_sse2(uint32_t* dest, int length, uint32_t color,
     comp_func_helper_sse2(dest, length, color, ialpha);
 }
 
-void comp_func_Source_sse2(uint32_t* dest, const uint32_t* src, int length,
+void Vcomp_func_Source_sse2(uint32_t* dest, const uint32_t* src, int length,
                            uint32_t const_alpha)
 {
     int ialpha;
@@ -246,9 +244,7 @@ void comp_func_Source_sse2(uint32_t* dest, const uint32_t* src, int length,
     }
 }
 
-#endif // RLOTTIE_WITH_STATIC_QT
-
-void comp_func_SourceOver_sse2_1(uint32_t* dest, const uint32_t* src,
+void Vcomp_func_SourceOver_sse2_1(uint32_t* dest, const uint32_t* src,
                                  int length, uint32_t const_alpha)
 {
     uint32_t s, sia;
@@ -439,13 +435,11 @@ static force_inline uint32_t core_combine_over_u_pixel_sse2(uint32_t src,
     return dst;
 }
 
-#ifndef RLOTTIE_WITH_STATIC_QT
-
 // static force_inline void
 // core_combine_over_u_sse2_no_mask (uint32_t *	  pd,
 //                  const uint32_t*    ps,
 //                  int                w)
-void comp_func_SourceOver_sse2(uint32_t* pd, const uint32_t* ps, int w,
+void Vcomp_func_SourceOver_sse2(uint32_t* pd, const uint32_t* ps, int w,
                                uint32_t)
 {
     uint32_t s, d;
@@ -500,7 +494,5 @@ void comp_func_SourceOver_sse2(uint32_t* pd, const uint32_t* ps, int w,
         w--;
     }
 }
-
-#endif // RLOTTIE_WITH_STATIC_QT
 
 #endif
