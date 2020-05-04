@@ -225,6 +225,10 @@ class LOTAnimInfo
 {
 public:
     T value(int frameNo) const {
+        if (mKeyFrames.empty())
+            return T();
+        
+        
         if (mKeyFrames.front().mStartFrame >= frameNo)
             return mKeyFrames.front().mValue.mStartValue;
         if(mKeyFrames.back().mEndFrame <= frameNo)
@@ -238,7 +242,8 @@ public:
     }
 
     float angle(int frameNo) const {
-        if ((mKeyFrames.front().mStartFrame >= frameNo) ||
+        if (mKeyFrames.empty() ||
+            (mKeyFrames.front().mStartFrame >= frameNo) ||
             (mKeyFrames.back().mEndFrame <= frameNo) )
             return 0;
 
@@ -250,6 +255,8 @@ public:
     }
 
     bool changed(int prevFrame, int curFrame) const {
+        if (mKeyFrames.empty())
+            return false;
         auto first = mKeyFrames.front().mStartFrame;
         auto last = mKeyFrames.back().mEndFrame;
 
