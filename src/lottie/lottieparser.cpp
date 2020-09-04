@@ -1456,11 +1456,11 @@ std::shared_ptr<LOTTransformData> LottieParserImpl::parseTransformObject(
         } else if (0 == strcmp(key, "hd")) {
             sharedTransform->mHidden = GetBool();
         } else if (0 == strcmp(key, "rx")) {
-            parseProperty(obj->mExtra->m3DRx);
+            Skip(key);
         } else if (0 == strcmp(key, "ry")) {
-            parseProperty(obj->mExtra->m3DRy);
+            Skip(key);
         } else if (0 == strcmp(key, "rz")) {
-            parseProperty(obj->mExtra->m3DRz);
+            Skip(key);
         } else {
             Skip(key);
         }
