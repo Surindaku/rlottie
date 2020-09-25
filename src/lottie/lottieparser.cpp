@@ -313,7 +313,7 @@ bool LottieParserImpl::EnterObject()
 {
     if (st_ != kEnteringObject) {
         st_ = kError;
-        RAPIDJSON_ASSERT(false);
+        //RAPIDJSON_ASSERT(false);
         return false;
     }
 
@@ -325,7 +325,7 @@ bool LottieParserImpl::EnterArray()
 {
     if (st_ != kEnteringArray) {
         st_ = kError;
-        RAPIDJSON_ASSERT(false);
+        //RAPIDJSON_ASSERT(false);
         return false;
     }
 
@@ -355,7 +355,7 @@ const char *LottieParserImpl::NextObjectKey()
     }
 
     if (st_ != kExitingObject) {
-        RAPIDJSON_ASSERT(false);
+        //RAPIDJSON_ASSERT(false);
         st_ = kError;
         return nullptr;
     }
@@ -379,7 +379,7 @@ bool LottieParserImpl::NextArrayValue()
     }
 
     if (st_ == kError || st_ == kHasKey) {
-        RAPIDJSON_ASSERT(false);
+        //RAPIDJSON_ASSERT(false);
         st_ = kError;
         return false;
     }
@@ -391,7 +391,7 @@ int LottieParserImpl::GetInt()
 {
     if (st_ != kHasNumber || !v_.IsInt()) {
         st_ = kError;
-        RAPIDJSON_ASSERT(false);
+        //RAPIDJSON_ASSERT(false);
         return 0;
     }
 
@@ -404,7 +404,7 @@ double LottieParserImpl::GetDouble()
 {
     if (st_ != kHasNumber) {
         st_ = kError;
-        RAPIDJSON_ASSERT(false);
+        //RAPIDJSON_ASSERT(false);
         return 0.;
     }
 
@@ -417,7 +417,7 @@ bool LottieParserImpl::GetBool()
 {
     if (st_ != kHasBool) {
         st_ = kError;
-        RAPIDJSON_ASSERT(false);
+        //RAPIDJSON_ASSERT(false);
         return false;
     }
 
@@ -440,7 +440,7 @@ const char *LottieParserImpl::GetString()
 {
     if (st_ != kHasString) {
         st_ = kError;
-        RAPIDJSON_ASSERT(false);
+        //RAPIDJSON_ASSERT(false);
         return nullptr;
     }
 
@@ -457,7 +457,7 @@ void LottieParserImpl::SkipOut(int depth)
         } else if (st_ == kExitingArray || st_ == kExitingObject) {
             --depth;
         } else if (st_ == kError) {
-            RAPIDJSON_ASSERT(false);
+            //RAPIDJSON_ASSERT(false);
             return;
         }
 
@@ -925,9 +925,10 @@ std::shared_ptr<LOTData> LottieParserImpl::parseLayer(bool record)
         } else if (0 == strcmp(key, "bm")) {
             layer->mBlendMode = getBlendMode();
         } else if (0 == strcmp(key, "ks")) {
-            RAPIDJSON_ASSERT(PeekType() == kObjectType);
-            EnterObject();
-            layer->mTransform = parseTransformObject(ddd);
+            if (PeekType() == kObjectType) {
+                EnterObject();
+                layer->mTransform = parseTransformObject(ddd);
+            }
         } else if (0 == strcmp(key, "shapes")) {
             parseShapesAttr(layer);
         } else if (0 == strcmp(key, "w")) {
@@ -981,7 +982,7 @@ std::shared_ptr<LOTData> LottieParserImpl::parseLayer(bool record)
         staticFlag &= child.get()->isStatic();
     }
 
-    if (layer->hasMask()) {
+    if (layer->hasMask() && layer->mExtra) {
         for (const auto &mask : layer->mExtra->mMasks) {
             staticFlag &= mask->isStatic();
         }
@@ -1135,7 +1136,8 @@ std::shared_ptr<LOTData> LottieParserImpl::parseGroupObject()
                 RAPIDJSON_ASSERT(PeekType() == kObjectType);
                 parseObject(group);
             }
-            if (group->mChildren.back()->mType == LOTData::Type::Transform) {
+            if (!group->mChildren.empty()
+                && group->mChildren.back()->mType == LOTData::Type::Transform) {
                 group->mTransform = std::static_pointer_cast<LOTTransformData>(
                     group->mChildren.back());
                 group->mChildren.pop_back();
@@ -1456,11 +1458,20 @@ std::shared_ptr<LOTTransformData> LottieParserImpl::parseTransformObject(
         } else if (0 == strcmp(key, "hd")) {
             sharedTransform->mHidden = GetBool();
         } else if (0 == strcmp(key, "rx")) {
-            Skip(key);
+            if (!obj->mExtra) {
+                return sharedTransform;
+            }
+            parseProperty(obj->mExtra->m3DRx);
         } else if (0 == strcmp(key, "ry")) {
-            Skip(key);
+            if (!obj->mExtra) {
+                return sharedTransform;
+            }
+            parseProperty(obj->mExtra->m3DRy);
         } else if (0 == strcmp(key, "rz")) {
-            Skip(key);
+            if (!obj->mExtra) {
+                return sharedTransform;
+            }
+            parseProperty(obj->mExtra->m3DRz);
         } else {
             Skip(key);
         }
