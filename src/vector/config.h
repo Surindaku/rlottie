@@ -11,7 +11,7 @@
 //#define LOTTIE_IMAGE_MODULE_SUPPORT
 
 //enable lottie model caching
-//#define LOTTIE_CACHE_SUPPORT
+#define LOTTIE_CACHE_SUPPORT
 
 // disable image loader
 #define LOTTIE_IMAGE_MODULE_DISABLED
